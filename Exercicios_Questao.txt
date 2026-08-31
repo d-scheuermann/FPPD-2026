@@ -1,0 +1,46 @@
+// Questoes ex3
+
+
+
+1. Execute o programa 5 vezes com go run ex3.go. O resultado é sempre 4000000?
+
+Nao.
+
+2. Execute com o detector de corrida: go run -race ex3.go. O que a saída indica?
+
+Saida indica presenca de 3 DATARACES.
+
+3. Corrija o programa adicionando um sync.Mutex para proteger o acesso ao contador. Salve como ex3_mutex.go, execute novamente (com e sem -race) e verifique que o resultado é sempre 4000000.
+
+O resultado agora e sempre 4000000.
+
+4. Compare o tempo de execução das duas versões:
+
+ex3.go = real    0m0.211s, user    0m0.136s, sys     0m0.089s
+ex3_mutex.go = real    0m0.092s, user    0m0.054s, sys     0m0.060s
+
+NAO TEM OVERHEAD, POIS A CONCORRENCIA SEGUE VIA AS DUAS GOROUTINES.
+
+
+
+// Questoes ex4
+
+1. Execute com go run ex4.go. O programa termina? Quais linhas são impressas e qual mensagem o runtime do Go exibe?
+
+O PROGRAMA INTERROMPE EM DEADLOCK (fatal error: all goroutines are asleep - deadlock!), mas ele imprime (tarefa1: adquiriu A) (tarefa2: adquiriu B)
+
+2. Explique o que acontece: qual mutex cada goroutine já possui e qual ela está esperando? Identifique a espera circular entre as duas.
+
+A GOROUTINE 1 OCUPA mutexA, A GOROUTINE 2 OCUPA mutexB, QUANDO UMA DAS DUAS TENTA OCUPAR A OUTRA MUTEX, ELAS SE TRAVAM POIS AMBAS MUTEX ESTAO EM USO.
+
+3. Execute com go run -race ex4.go. Desta vez o programa trava sem exibir mensagem alguma — interrompa com Ctrl+C. O detector acusou alguma corrida? Explique a diferença entre data race e deadlock, e por que -race não ajuda neste caso.
+
+O PROGRAMA NAO ACUSOU DE NENHUMA CORRIDA, A DIFERENCA DE DEADLOCK E DATARACE ESTA SIMBOLIZADA NA FORMA DE TERMINO DO PROGRAMA, ONDE DEADLOCK JAMAIS FINALIZA.
+
+4. Corrija o deadlock fazendo as duas goroutines adquirirem os mutexes sempre na mesma ordem (primeiro A, depois B). Salve como ex4_ordem.go e execute novamente.
+
+OK
+
+5. Das quatro condições de Coffman (exclusão mútua, posse e espera, ausência de preempção, espera circular), qual delas a sua correção eliminou?
+
+A CORRECAO ELIMINOU A ESPERA CIRCULAR PRESENTE NO PROGRAMA.

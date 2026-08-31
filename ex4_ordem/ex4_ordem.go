@@ -13,7 +13,7 @@ func tarefa1(wg *sync.WaitGroup) {
 	mutexA.Lock()
 	fmt.Println("tarefa1: adquiriu A")
 	time.Sleep(100 * time.Millisecond)
-	mutexA.Unlock() // espera por B, que está com tarefa2
+	mutexA.Unlock() 
 	mutexB.Lock()
 	fmt.Println("tarefa1: adquiriu B")
 	mutexB.Unlock()
@@ -23,7 +23,7 @@ func tarefa2(wg *sync.WaitGroup) {
 	mutexB.Lock()
 	fmt.Println("tarefa2: adquiriu B")
 	time.Sleep(100 * time.Millisecond)
-	mutexB.Unlock() // espera por A, que está com tarefa1
+	mutexB.Unlock()
 	mutexA.Lock()
 	fmt.Println("tarefa2: adquiriu A")
 	mutexA.Unlock()
