@@ -27,7 +27,7 @@ func decrescente(wg *sync.WaitGroup) {
 	wg.Done()
 }
 
-func main() {
+func main1() {
 	var wg sync.WaitGroup
 
 	wg.Add(2)

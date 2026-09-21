@@ -30,7 +30,7 @@ func consumidor(ch <-chan string, done chan<- bool) {
 	done <- true
 }
 
-func main() {
+func main4() {
 	ch := make(chan string)
 	done := make(chan bool)
 

@@ -29,7 +29,7 @@ func decrescente(done chan<- bool) {
 	done <- true // Sinaliza que a goroutine finalizou
 }
 
-func main() {
+func main1() {
 	// Canal usado para sinalização de término
 	done := make(chan bool)
 

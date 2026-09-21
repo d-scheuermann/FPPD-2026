@@ -6,7 +6,7 @@ package main
 
 import "fmt"
 
-func main() {
+func main3() {
 	ch := make(chan int, 5)
 
 	go func() {

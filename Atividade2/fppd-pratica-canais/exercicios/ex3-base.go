@@ -23,7 +23,7 @@ func impressora(in <-chan int, done chan<- bool) {
 
 }
 
-func main() {
+func main3() {
 	valores := []int{1, 2, 3, 4, 5}
 
 	c1 := make(chan int)

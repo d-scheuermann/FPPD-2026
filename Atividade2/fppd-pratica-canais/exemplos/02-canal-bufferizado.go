@@ -6,7 +6,7 @@ package main
 
 import "fmt"
 
-func main() {
+func main2() {
 	ch := make(chan int, 3) // buffer com 3 posições
 
 	ch <- 10 // não bloqueia (buffer tem espaço)
