@@ -46,7 +46,7 @@ func corredor(id int, wg *sync.WaitGroup) {
 	fmt.Printf("[Corredor %d] chegou (tempo: %v)\n", id, duracao)
 }
 
-func main() {
+func main2() {
 	var wg sync.WaitGroup
 
 	for i := 1; i <= numCorredores; i++ {

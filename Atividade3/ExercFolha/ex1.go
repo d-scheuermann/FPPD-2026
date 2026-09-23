@@ -44,7 +44,7 @@ func usarBanheiro(ctx context.Context, id int, sem *semaphore.Weighted, wg *sync
 	fmt.Printf("[Pessoa %2d] <<< SAIU do banheiro (usou %v)\n", id, duracao)
 }
 
-func main() {
+func main1() {
 	var wg sync.WaitGroup
 
 	sem := semaphore.NewWeighted(capacidade)
