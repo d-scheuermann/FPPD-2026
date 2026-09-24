@@ -24,37 +24,38 @@ const (
 	totalPessoas = 10
 )
 
-func usarBanheiro(ctx context.Context, id int, sem *semaphore.Weighted, wg *sync.WaitGroup) {
+var sem = semaphore.NewWeighted(int64(capacidade))
+
+func usarBanheiro(id int, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	fmt.Printf("[Pessoa %2d] quer usar o banheiro\n", id)
+	limiteEspera := time.Duration(1000+rand.Intn(2000)) * time.Millisecond
+	ctx, cancel := context.WithTimeout(context.Background(), limiteEspera)
+	defer cancel() 
 
-	// Adquire 1 permissão do semáforo (bloqueia se já houver 3 dentro)
+	fmt.Printf("[Pessoa %2d] quer usar o banheiro (tolera esperar até %v)\n", id, limiteEspera)
+
 	if err := sem.Acquire(ctx, 1); err != nil {
-		fmt.Printf("[Pessoa %2d] erro ao adquirir o semáforo: %v\n", id, err)
+		fmt.Printf("[Pessoa %2d] DESISTIU e foi embora! (esperou demais)\n", id)
 		return
 	}
 
-	// Garante que a permissão será liberada mesmo em caso de erro/panic
 	defer sem.Release(1)
 
 	fmt.Printf("[Pessoa %2d] >>> ENTROU no banheiro\n", id)
-	duracao := time.Duration(1+rand.Intn(3)) * time.Second
-	time.Sleep(duracao)
-	fmt.Printf("[Pessoa %2d] <<< SAIU do banheiro (usou %v)\n", id, duracao)
+	duracaoUso := time.Duration(1+rand.Intn(3)) * time.Second
+	time.Sleep(duracaoUso)
+	fmt.Printf("[Pessoa %2d] <<< SAIU do banheiro (usou por %v)\n", id, duracaoUso)
 }
 
-func main1() {
+func main() {
 	var wg sync.WaitGroup
-
-	sem := semaphore.NewWeighted(capacidade)
-	ctx := context.Background()
 
 	for i := 1; i <= totalPessoas; i++ {
 		wg.Add(1)
-		go usarBanheiro(ctx, i, sem, &wg)
+		go usarBanheiro(i, &wg)
 	}
 
 	wg.Wait()
-	fmt.Println("\nTodos usaram o banheiro.")
+	fmt.Println("\nProcesso finalizado.")
 }

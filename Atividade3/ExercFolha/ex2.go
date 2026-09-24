@@ -21,11 +21,11 @@ import (
 
 const numCorredores = 6
 
-// Estado compartilhado
+// Variáveis globais de sincronização
 var (
-	largou bool
 	mu     sync.Mutex
 	cond   = sync.NewCond(&mu)
+	pronto bool // inicializada como false por padrão em Go
 )
 
 func corredor(id int, wg *sync.WaitGroup) {
@@ -33,9 +33,9 @@ func corredor(id int, wg *sync.WaitGroup) {
 
 	fmt.Printf("[Corredor %d] na linha de largada\n", id)
 
-	// Aguarda o sinal do juiz
+	// Adquire o lock e espera em loop até que a variável pronto seja true
 	cond.L.Lock()
-	for !largou {
+	for !pronto {
 		cond.Wait() // Libera a trava temporariamente e bloqueia até receber o Broadcast
 	}
 	cond.L.Unlock()
@@ -46,7 +46,7 @@ func corredor(id int, wg *sync.WaitGroup) {
 	fmt.Printf("[Corredor %d] chegou (tempo: %v)\n", id, duracao)
 }
 
-func main2() {
+func main() {
 	var wg sync.WaitGroup
 
 	for i := 1; i <= numCorredores; i++ {
@@ -58,11 +58,11 @@ func main2() {
 	fmt.Println("\n[Juiz] Preparando a pista...")
 	time.Sleep(2 * time.Second)
 
-	// Altera o estado e avisa todos os corredores
+	// Sinaliza a largada com segurança usando o lock
 	cond.L.Lock()
-	largou = true
+	pronto = true
 	fmt.Println("[Juiz] VAI!\n")
-	cond.Broadcast() // Acorda todas as goroutines em espera
+	cond.Broadcast() // Acorda todos os corredores bloqueados no cond.Wait()
 	cond.L.Unlock()
 
 	wg.Wait()
