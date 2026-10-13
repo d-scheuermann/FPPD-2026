@@ -10,6 +10,11 @@ func executarQuebraSimetria(n, r int) {
 	fmt.Println("\n--- QUEBRA DE SIMETRIA ---")
 	fmt.Println("O ultimo filosofo pega os garfos na ordem inversa.")
 
+	if n < 2 {
+		fmt.Println("Sao necessarios pelo menos 2 filosofos.")
+		return
+	}
+
 	garfos := make([]chan struct{}, n)
 
 	for i := 0; i < n; i++ {

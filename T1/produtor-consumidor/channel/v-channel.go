@@ -1,9 +1,10 @@
 // Problema 2: Produtor/Consumidor com Buffer Limitado (versão com channel)
 //
 // Uso:
-//   go run v-channel.go                      # varre K = 1, 10, 100
-//   go run v-channel.go -k 10 -p 4 -c 4      # um único K
-//   go run v-channel.go -csv > resultados.csv
+//
+//	go run v-channel.go                      # varre K = 1, 10, 100
+//	go run v-channel.go -k 10 -p 4 -c 4      # um único K
+//	go run v-channel.go -csv > resultados.csv
 package main
 
 import (
